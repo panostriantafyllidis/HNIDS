@@ -16,10 +16,12 @@ In IoT environments, ensuring the security of connected devices and networks is 
 ## Installation
 
 1. Clone this repository to your local machine:
-git clone
+```
+git clone https://github.com/panostriantafyllidis/PySignatureIDS.git
+```
 
 2. Navigate to the project directory:
-cd signature-based-ids-python-iot
+cd PySignatureIDS
 
 3. Install the required dependencies:
 pip install -r requirements.txt
