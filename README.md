@@ -21,25 +21,33 @@ git clone https://github.com/panostriantafyllidis/PySignatureIDS.git
 ```
 
 2. Navigate to the project directory:
+```
 cd PySignatureIDS
+```
 
 3. Install the required dependencies:
+```
 pip install -r requirements.txt
-
+```
 
 ## Usage
 
 1. Prepare your IoT network traffic dataset in CSV format and place it in the `data/` directory.
 
 2. Train the intrusion detection model using the provided dataset:
+```
 python train.py --dataset data/dataset.csv
+```
 
 3. Test the trained model on a separate test dataset:
+```
 python test.py --model trained_model.pth --test_dataset data/test_dataset.csv
+```
 
 4. Visualize the detection results and performance metrics:
+```
 python visualization.py --results results.csv
-
+```
 
 ## License
 
