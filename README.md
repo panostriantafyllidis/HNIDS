@@ -59,26 +59,26 @@ python visualization.py --results results.csv
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Overview
+# Overview
 
-# Background
+## Background
 
 Cloud computingis an emerging computing paradigm aimed at providing IT (information technology) services in a similar manner as the electricity grid. In Cloud computing, computing resources, data and software are managed by service providers on the Internet, and are provided to users and their devices in an on-demand manner. This new paradigm offers a number of advantages including on-demand self-service, ubiquitous and broad network access, resource pooling, rapid resource elasticity and usage-based pricing, etc [1]. While this paradigmis attractive to users in many aspects, it also introduces some serious concerns. One of these concerns is how to preserve data integrity in cloud computing.
 
-# Description
+## Description
 
 In this project, you have an opportunity to research and design an intrusion detection system to detect security violations in a Cloud computing environment. The project tasks include:
 · Investigate/identify methods appropriate for detecting security violations in foreign domains.
 · Design a new method, or modify an existing one, to facilitate such intrusion detections.
 · Implement and evaluate the method.
 
-# Deliverables
+## Deliverables
 
-1.      Report your literature survey.
-2.      The design and implementation of a method for intrusion detections.
-3.      Insights to the design based upon the evaluation of your implementation.
+1. Report your literature survey.
+2. The design and implementation of a method for intrusion detections.
+3. Insights to the design based upon the evaluation of your implementation.
 
-# References
+## References
 
 1. Sana Ullah Jan, et al, "Toward a Lightweight Intrusion Detection System for the Internet of Things", IEEE Access, Year: 2019, Volume: 7.
 
