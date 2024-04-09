@@ -1,0 +1,4 @@
+signatures:
+  - id: 1
+    name: "Example Threat"
+    pattern: "badpattern123"
