@@ -5,3 +5,10 @@ matplotlib>=3.4.3
 seaborn>=0.11.2
 scapy>=2.4.3
 pyyaml>=5.4
+joblib>=1.1.0
+tensorflow>=2.7.0  # or pytorch>=1.10.0
+flask>=2.1.0
+django>=4.0.0
+pymongo>=4.0.0
+pytest>=6.2.0
+loguru>=0.5.3
