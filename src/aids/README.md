@@ -1,0 +1,1 @@
+**aids/**: Directory for Anomaly-based IDS (AIDS) components. - **aids_main.py**: Main script for AIDS. - **aids_model.py**: AIDS model implementation. - **aids_training/**: Directory for training AIDS models. - **train_model.py**: Script for training the AIDS model. - **model_evaluation.py**: Script for evaluating the trained model.
