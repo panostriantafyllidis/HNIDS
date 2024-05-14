@@ -1,3 +1,0 @@
-network_interface: "eth0"
-signature_file: "signatures.yaml"
-alert_log: "alerts.log"
