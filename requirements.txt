@@ -18,3 +18,4 @@ kafka-python>=2.0.0
 requests>=2.31.0
 marshmallow>=3.13.0
 python-dotenv>=1.0.1
+imbalanced-learn>=0.12.0
