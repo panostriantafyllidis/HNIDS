@@ -4,13 +4,18 @@ from random import choice, randint
 from sys import argv
 from time import sleep, time
 
-from netifaces import AF_INET, ifaddresses
+import netifaces
+
+AF_INET = netifaces.AF_INET
+ifaddresses = netifaces.ifaddresses
 from scapy.config import conf
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 
 from .importer import RULES
 
-INTERFACE = argv[1] if len(argv) == 2 else "enp0s8"
+# INTERFACE = argv[1] if len(argv) == 2 else "enp0s8"
+INTERFACE = argv[1] if len(argv) == 2 else "Ethernet"
+
 ip = ifaddresses(INTERFACE)[AF_INET][0]["addr"]
 SOCKET = conf.L2socket(iface=INTERFACE)
 DEFAULT_PORT = 80
@@ -28,6 +33,7 @@ def getPortsFromRange(ports):
 
 def create_package(proto, src_port, dst_ip, dst_port):
     package = Ether() / IP(src=ip, dst=dst_ip)
+    # package = Ether() / IP(src=ip, dst="192.168.56.104")
     if proto == "ICMP":
         package = package / ICMP()
     elif proto == "TCP":
@@ -81,6 +87,8 @@ def send_negatives(count=10):
     protocols = ["IP", "ICMP", "TCP", "UDP"]
     #
     ips = [
+        "10.0.2.6",
+        "192.168.56.1",
         "192.168.0.5",
         "192.168.0.3",
         "192.168.1.4",

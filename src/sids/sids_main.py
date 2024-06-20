@@ -35,7 +35,7 @@ def main() -> None:
         sys_exit("[@] No interface was passed. Usage: main.py <INTERFACE> [RULE_PATH]")
 
     interface = argv[1]
-    rule_path = argv[2] if len(argv) > 2 else "sides_rules/default.rules"
+    rule_path = argv[2] if len(argv) > 2 else "sids_rules/default.rules"
 
     if not path.exists("logs"):
         makedirs("logs")

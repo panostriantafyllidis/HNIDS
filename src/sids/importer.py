@@ -32,7 +32,7 @@ RULEPATH = ""
 try:
     RULEPATH = argv[2]
 except IndexError:
-    RULEPATH = "sids-rules/eval.rules"
+    RULEPATH = "sids_rules/eval.rules"
 finally:
     print(f"[*] loading {RULEPATH}")
 
