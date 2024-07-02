@@ -58,9 +58,9 @@ def verify_rules(ruleset: List[str]) -> List[Signature]:
         if not rule.startswith("#"):
             if RULE_REGEX.match(rule):
                 signature = Signature(rule)
-                if not signature.s_id:
-                    signature.s_id = str(len(signatures) + 1)
-                if signature.s_id in {s.s_id for s in signatures}:
+                if not signature.sID:
+                    signature.sID = str(len(signatures) + 1)
+                if signature.sID in {s.sID for s in signatures}:
                     raise ValueError(f"ID in use for {rule}")
                 signatures.append(signature)
             else:

@@ -28,11 +28,12 @@ REGEX = reg_comp(
         $ """,
     VERBOSE,
 )
+
 RULEPATH = ""
 try:
     RULEPATH = argv[2]
 except IndexError:
-    RULEPATH = "sids_rules/eval.rules"
+    RULEPATH = "rules/eval.rules"
 finally:
     print(f"[*] loading {RULEPATH}")
 

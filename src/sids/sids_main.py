@@ -1,41 +1,67 @@
 # -*- coding: utf-8 -*-
 #! /usr/bin/env python3
 
+"""
+A Network Signature Intrusion Detection System (IDS) implemented in Python.
+"""
+
 from multiprocessing import Queue
 from os import makedirs, path
 from sys import argv
 from sys import exit as sys_exit
-from time import sleep, time
-from typing import Optional
+from time import time
+
+import ifaddr
+from scapy.all import conf, get_if_list
 
 from .analyzer import Analyzer
 from .sniffer import Sniffer
 
-"""
-Intrusion Detection System (IDS) implemented in Python.
-"""
+# TO-DO : Tranfer Banner and MANUF_PATH seting confirmation (from sniffer),
+# to the main.py file of the Hybrid system
+
+# def print_banner() -> None:
+#     banner = """
+#     ███╗   ██╗ ██████╗███████╗██╗         ██╗██████╗ ███████╗
+#     ████╗  ██║██╔════╝██╔════╝██║         ██║██╔══██╗██╔════╝
+#     ██╔██╗ ██║██║     ███████╗██║         ██║██║  ██║███████╗
+#     ██║╚██╗██║██║     ╚════██║██║         ██║██║  ██║╚════██║
+#     ██║ ╚████║╚██████╗███████║███████╗    ██║██████╔╝███████║
+#     ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝    ╚═╝╚═════╝ ╚══════╝
+#     """
+#     print(banner)
 
 
-def print_banner() -> None:
-    banner = """
-     █████╗  ██████╗███████╗██╗         ██╗██████╗ ███████╗
-    ██╔══██╗██╔════╝██╔════╝██║         ██║██╔══██╗██╔════╝
-    ███████║██║     ███████╗██║         ██║██║  ██║███████╗
-    ██╔══██║██║     ╚════██║██║         ██║██║  ██║╚════██║
-    ██║  ██║╚██████╗███████║███████╗    ██║██████╔╝███████║
-    ╚═╝  ╚═╝ ╚═════╝╚══════╝╚══════╝    ╚═╝╚═════╝ ╚══════╝
-    """
-    print(banner)
+def get_interfaces():
+    adapters = ifaddr.get_adapters()
+    interfaces = {}
+    for adapter in adapters:
+        for ip in adapter.ips:
+            if isinstance(ip.ip, str):  # IPv4 address
+                interfaces[adapter.nice_name] = ip.ip
+    return interfaces
+
+
+def select_interface(interface_details):
+    print("Available interfaces:")
+    for i, (name, ip) in enumerate(interface_details.items()):
+        print(f"{i}: {name} (IP: {ip})")
+    choice = int(input("Select an interface by number: "))
+    selected_name = list(interface_details.keys())[choice]
+    return selected_name, interface_details[selected_name]
 
 
 def main() -> None:
-    print_banner()
+    # print_banner()
 
-    if len(argv) < 2:
-        sys_exit("[@] No interface was passed. Usage: main.py <INTERFACE> [RULE_PATH]")
+    interface_details = get_interfaces()
 
-    interface = argv[1]
-    rule_path = argv[2] if len(argv) > 2 else "sids_rules/default.rules"
+    if len(argv) < 2 or argv[1] not in interface_details:
+        interface, ip = select_interface(interface_details)
+    else:
+        interface = argv[1]
+
+    rule_path = argv[2] if len(argv) > 2 else "src/sids/rules/default.rules"
 
     if not path.exists("logs"):
         makedirs("logs")
@@ -46,27 +72,27 @@ def main() -> None:
     timestamp = str(int(time()))
     log_file_path = path.join("logs", f"{timestamp}.log")
 
-    with open(log_file_path, "w") as log_file:
-        sniffer = Sniffer(interface, queue, timestamp)
-        show_summary = False
-        analyzer = Analyzer(queue, log_file, rule_path, show_summary)
+    sniffer = Sniffer(interface, queue, timestamp)
+    show_summary = False
+    analyzer = Analyzer(queue, log_file_path, rule_path, show_summary)
 
-        try:
-            print("[*] Start sniffing")
-            sniffer.start()
-            print("[*] Start analyzing")
-            analyzer.start()
+    try:
+        print("[*] Start sniffing")
+        sniffer.start()
+        print("[*] Start analyzing")
+        analyzer.start()
 
-            while True:
-                sleep(100)
+        sniffer.join()
+        analyzer.join()
 
-        except KeyboardInterrupt:
-            print("[*] Stopping IDS")
-            sys_exit()
-            analyzer.join()
-            sleep(0.1)
-            sniffer.join()
-            print("[*] Bye")
+    except KeyboardInterrupt:
+        print("[*] Stopping IDS")
+        sniffer.terminate()
+        analyzer.terminate()
+        sniffer.join()
+        analyzer.join()
+        print("[*] Bye")
+        sys_exit()
 
 
 if __name__ == "__main__":

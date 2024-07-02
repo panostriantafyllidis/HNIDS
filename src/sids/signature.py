@@ -1,3 +1,4 @@
+# signature.py
 # -*- coding: utf-8 -*-
 #! /usr/bin/env python3
 from copy import deepcopy
@@ -88,7 +89,7 @@ class Signature(object):
 
     Attributes
     ----------
-    s_id : str
+    sID : str
         The ID of the signature.
     proto : str
         The protocol of the packet.
@@ -121,7 +122,7 @@ class Signature(object):
         super(Signature, self).__init__()
         if isinstance(obj, Ether):
             direction = "->"
-            s_id = "-1"
+            sID = "-1"
             if IP in obj:
                 proto = obj[2].name
                 src_ip = str(obj[1].src)
@@ -146,7 +147,7 @@ class Signature(object):
                 src_split = string[1].split(":")
                 dst_split = string[3].split(":")
 
-                s_id = ""
+                sID = ""
                 proto = string[0]
                 src_ip = src_split[0]
                 src_port = src_split[1]
@@ -159,7 +160,7 @@ class Signature(object):
                 src_split = string[2].split(":")
                 dst_split = string[4].split(":")
 
-                s_id = string[0].split(":")[0]
+                sID = string[0].split(":")[0]
                 proto = string[1]
                 src_ip = src_split[0]
                 src_port = src_split[1]
@@ -170,7 +171,7 @@ class Signature(object):
         else:
             raise ValueError(obj, "cant be initialized")
         del obj
-        self.s_id = s_id
+        self.sID = sID
         self.proto = proto
         self.src_ip = src_ip
         self.src_port = src_port
@@ -183,7 +184,7 @@ class Signature(object):
         return f"{self.proto} {self.src_ip}:{self.src_port} {self.dir} {self.dst_ip}:{self.dst_port} {self.payload}"
 
     def __repr__(self):
-        return f"ruleID {self.s_id}"
+        return f"ruleID {self.sID}"
 
     def __eq__(self, other):
         """

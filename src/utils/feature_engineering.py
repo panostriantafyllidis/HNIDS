@@ -1,7 +1,7 @@
 import numpy as np
+from skfeature.function.information_theoretical_based import FCBF
 from sklearn.decomposition import KernelPCA
 from sklearn.feature_selection import mutual_info_classif
-from skfeature.function.information_theoretical_based import FCBF
 from skopt import BayesSearchCV
 
 
@@ -22,7 +22,8 @@ def select_features_ig_fcbf(X, y):
     fcbf_indices = FCBF.fcbf(X, y)
 
     # Combine IG and FCBF results
-    combined_indices = np.intersect1d(ig_sorted_indices, fcbf_indices)
+    # combined_indices = np.intersect1d(ig_sorted_indices, fcbf_indices)
+    combined_indices = np.union1d(ig_sorted_indices, fcbf_indices)
     X_selected = X[:, combined_indices]
     return X_selected
 

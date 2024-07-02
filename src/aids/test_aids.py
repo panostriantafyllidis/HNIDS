@@ -1,4 +1,4 @@
-from .aids_main import AIDS
+from aids.aids_main import AIDS
 
 if __name__ == "__main__":
     aids = AIDS()
