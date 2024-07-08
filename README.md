@@ -12,6 +12,19 @@ This project aims to develop a Hybrid Intrusion Detection System (HIDS) that com
 - **Resource Optimization**: Focuses on optimizing computational and memory requirements for efficient operation in resource-constrained environments.
 - **High Accuracy**: Aims to minimize false positives and false negatives while maintaining high detection accuracy.
 
+## Versioning notes
+
+### example
+
+- 1.2.3
+  > 1 expresses version of the Hybrid connection/ensemble of the SIDS+AIDS modules
+  > 2 expresses version of the AIDS module
+  > 3 expresses version of the SIDS module
+
+Thus : "this is the 1 iteration of the Hybrid System, using the 2nd AIDS and 3rd SIDS module versions"
+
+This format helped me process multiple approaches during Net-HIDS development , while incorporating different code and features from various sources.
+
 ## Setup Instructions
 
 1. Clone the repository:
@@ -21,7 +34,7 @@ git clone https://github.com/panostriantafyllidis/MSc-Hybrid-IDS.git
 cd MSc-Hybrid-IDS
 ```
 
-2. Create a virtual environment:
+2. Create a virtual environment (Optional):
 
 ```sh
 python -m venv venv
@@ -50,10 +63,10 @@ pip install -r requirements.txt
 5. Run the project:
 
 ```sh
-python -m src.sids.sids_main
+python -m src.sids.main
 ```
 
-## Usage
+## Independent Module Usage
 
 SIDS and AIDS are executed separately in different ways.
 
@@ -71,17 +84,13 @@ python -m src.aids.test_aids
 
 (For Attacker)
 
-```bash
-python sender.py
-```
+- Use the Packet Sender tool, linked here -> https://packetsender.com/download
 
-or
-
-```bash
-python -m src.sids.sender.py
-```
+- To view my attempt in making a (non-working) packet creation/sending script, look at the "..src/attacker" folder
 
 (For Receiver)
+
+- Start scanning...
 
 ```bash
 python sids_main.py
@@ -92,3 +101,5 @@ or
 ```bash
 python -m src.sids.sids_main.py
 ```
+
+- Next step : Send some packets from a different device , using the ruleset in "src/sids/rules" as guidelines for known/unknown packet-creation variation limits
