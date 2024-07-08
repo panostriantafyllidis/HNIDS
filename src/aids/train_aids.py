@@ -1,6 +1,5 @@
-from .aids_main import AIDS
+from src.aids.aids_main import save_models, train
 
 if __name__ == "__main__":
-    aids = AIDS()
-    aids.train("data/raw/KDDTrain+.txt")
-    aids.save_models("src/aids/aids_rules/models.pkl")
+    train("data/raw/KDDTrain+.txt")
+    save_models("src/aids/aids_rules/models.pkl")

@@ -3,12 +3,12 @@ from ipaddress import *
 from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 
-from src.sids.Action import *
-from src.sids.IPNetwork import *
-from src.sids.PacketStrings import ENDC, RED, matchedPacketString, packetString
-from src.sids.Ports import *
-from src.sids.Protocol import *
-from src.sids.Utils import *
+from sids.Action import *
+from sids.IPNetwork import *
+from sids.PacketStrings import ENDC, RED, matchedPacketString, packetString
+from sids.Ports import *
+from sids.Protocol import *
+from sids.Utils import *
 
 
 class Rule:

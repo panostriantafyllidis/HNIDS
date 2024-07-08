@@ -1,0 +1,3 @@
+srcip,sport,dstip,dsport,Sload,Dload,Spkts,Dpkts,smeansz,dmeansz,res_bdy_len,Sjit,Djit,Stime,Ltime,Sintpkt,Dintpkt,Label,,,,,,,,,,,,,
+id,spkts,dpkts,rate,sload,dload,sinpkt,dinpkt,sjit,djit,smean,dmean,response_body_len,label,,,,,,,,,,,,,,,,,
+proto,state,dur,sbytes,dbytes,sttl,dttl,sloss,dloss,service,swin,dwin,stcpb,dtcpb,trans_depth,tcprtt,synack,ackdat,is_sm_ips_ports,ct_state_ttl,ct_flw_http_mthd,is_ftp_login,ct_ftp_cmd,ct_srv_src,ct_srv_dst,ct_dst_ltm,ct_src_ltm,ct_src_dport_ltm,ct_dst_sport_ltm,ct_dst_src_ltm,attack_cat

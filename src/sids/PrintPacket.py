@@ -4,8 +4,8 @@ from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.inet6 import IPv6
 
-from src.sids.Rule import *
-from src.sids.Utils import *
+from sids.Rule import *
+from sids.Utils import *
 
 RED = "\033[91m"
 ENDC = "\033[0m"

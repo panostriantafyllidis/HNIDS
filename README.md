@@ -1,5 +1,16 @@
 # Hybrid Intrusion Detection System (HIDS) Project
 
+```
+██╗ ██╗██╗ ██╗██████╗ ██████╗ ██╗██████╗ ███╗ ██╗██╗██████╗ ███████╗
+██║ ██║╚██╗ ██╔╝██╔══██╗██╔══██╗██║██╔══██╗ ████╗ ██║██║██╔══██╗██╔════╝
+███████║ ╚████╔╝ ██████╔╝██████╔╝██║██║ ██║ ██╔██╗ ██║██║██║ ██║███████╗
+██╔══██║ ╚██╔╝ ██╔══██╗██╔══██╗██║██║ ██║ ██║╚██╗██║██║██║ ██║╚════██║
+██║ ██║ ██║ ██████╔╝██║ ██║██║██████╔╝ ██║ ╚████║██║██████╔╝███████║
+╚═╝ ╚═╝ ╚═╝ ╚═════╝ ╚═╝ ╚═╝╚═╝╚═════╝ ╚═╝ ╚═══╝╚═╝╚═════╝ ╚══════╝
+```
+
+(made using https://www.patorjk.com/software/taag/)
+
 ## Overview
 
 This project aims to develop a Hybrid Intrusion Detection System (HIDS) that combines the strengths of Signature-based IDS (SIDS) and Anomaly-based IDS (AIDS) to provide robust security for cloud computing environments. The system is designed to detect and respond to both known and novel threats with high accuracy and minimal false positives.
@@ -63,7 +74,7 @@ pip install -r requirements.txt
 5. Run the project:
 
 ```sh
-python -m src.sids.main
+python -m src.sids.main.py
 ```
 
 ## Independent Module Usage
@@ -93,13 +104,7 @@ python -m src.aids.test_aids
 - Start scanning...
 
 ```bash
-python sids_main.py
-```
-
-or
-
-```bash
-python -m src.sids.sids_main.py
+python -m src.sids.sids_main
 ```
 
 - Next step : Send some packets from a different device , using the ruleset in "src/sids/rules" as guidelines for known/unknown packet-creation variation limits

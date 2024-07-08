@@ -3,8 +3,8 @@ from threading import Thread
 
 from scapy.all import *
 
-import src.sids.RuleFileReader
-from src.sids.Rule import *
+# import src.sids.RuleFileReader
+from sids.Rule import *
 
 
 class Sniffer(Thread):
