@@ -1,4 +1,4 @@
-# Hybrid Intrusion Detection System (HIDS) Project
+# A Hybrid Network Intrusion Detection System (NIDS) Project
 
 <div style="overflow-x: auto;">
   <pre>
