@@ -3,6 +3,8 @@ from src.sids import sids_main
 
 
 def print_banner() -> None:
+    # Font : ANSI Shadow
+    # Made at https://www.patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=HYBRID%20NIDS
     banner = """
     ██╗  ██╗██╗   ██╗██████╗ ██████╗ ██╗██████╗     ███╗   ██╗██╗██████╗ ███████╗
     ██║  ██║╚██╗ ██╔╝██╔══██╗██╔══██╗██║██╔══██╗    ████╗  ██║██║██╔══██╗██╔════╝
@@ -28,10 +30,10 @@ def main():
             print("Initiating Hybrid System...")
             sids_main.main()
         elif choice == "2":
-            print("Initiating SIDS...")
+            print("Initiating standalone Signature IDS...")
             sids_main.main()
         elif choice == "3":
-            print("Initiating AIDS...")
+            print("Initiating standalone Anomaly IDS...")
             aids_main.main()
         elif choice == "4":
             print("Exiting...")
