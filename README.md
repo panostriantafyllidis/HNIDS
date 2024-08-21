@@ -76,12 +76,27 @@ pip install -r requirements.txt
 5. Run the project:
 
 ```sh
-python -m src.sids.main.py
+python -m src.main
+```
+
+6. For SIDS, when promped, type 'default' for default ruleset path located in src/sids/rules , otherwise path a desired path like :
+
+```
+(no brackets)
+c:\Users\takis\OneDrive - The University of Manchester\MSc-Hybrid-IDS\src\sids\rules\exampleRules.txt
 ```
 
 ## Independent Module Usage
 
-SIDS and AIDS are executed separately in different ways.
+SIDS and AIDS are executed independantly in different ways.
+
+The main method is to use the Hybrid UI (main.py)
+
+If for some reason you would like to test/work them as a standalone package then:
+
+NOTE : As of v2.2.7, the shared UI (main.py) will be made in such way that the user's choice (choice 1 or 2) will affect the nature of code paths taken by SIDS (maybe AIDS too?) so the following command will not work (unless you comment-out/modify slightly the SIDS to undo this feature)
+
+If you want to work with AIDS without it making new signatures and trying to add them in the main ruleset - so just packet feeding and prediction analysis output -, then comment out the code relevant to this feature.
 
 ### AIDS
 

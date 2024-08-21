@@ -424,7 +424,7 @@ class Dicts:
             # information element field. User can input
             # information element value,
             # an integer in $[0, 255]$,
-            "gtp_version"
+            "gtp_version",
             # The gtp_version keyword is used to check for
             # specific GTP version. Relates to gtp_info
             # and gtp_type tables.
@@ -525,7 +525,7 @@ class Dicts:
             # NOTE: The stream_size option is only
             # available when the Stream preprocessor
             # is enabled.
-            "stream_size"
+            "stream_size",
             # The stream_size keyword allows a rule
             # to match traffic
             # according to the number of bytes observed,

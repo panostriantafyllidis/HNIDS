@@ -4,8 +4,8 @@ from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.inet6 import IPv6
 
-from sids.Rule import *
-from sids.Utils import *
+from src.sids.Rule import *
+from src.sids.Utils import *
 
 RED = "\033[91m"
 ENDC = "\033[0m"
@@ -83,10 +83,10 @@ def displayMatchedIP(ip, rule):
         print("\t Options : " + str(ip.options))
 
 
+# IPv6
 def displayIPv6(ip):
     """Display the IPv6 header"""
 
-    # TODO
     print("[IP HEADER]")
     print("\t Version: " + str(ip.version))
     print("\t Header Length: " + str(40) + " bytes")
@@ -94,6 +94,30 @@ def displayIPv6(ip):
     print("\t Traffic Class: " + str(ip.tc))
     print("\t Source: " + str(ip.src))
     print("\t Destination: " + str(ip.dst))
+
+
+def displayMatchedIPv6(ip, rule):
+    """Display the IPv6 header with matched fields in red."""
+
+    print("[IP HEADER]")
+    print("\t Version: " + str(ip.version))
+    print("\t Header Length: " + str(40) + " bytes")
+    if hasattr(rule, "tc"):
+        print(RED + "\t Traffic Class: " + str(ip.tc) + ENDC)
+    else:
+        print("\t Traffic Class: " + str(ip.tc))
+    if hasattr(rule, "fl"):
+        print(RED + "\t Flow Label: " + str(ip.fl) + ENDC)
+    else:
+        print("\t Flow Label: " + str(ip.fl))
+    if rule.srcIps.ipn.num_addresses == 1:
+        print(RED + "\t Source: " + str(ip.src) + ENDC)
+    else:
+        print("\t Source: " + str(ip.src))
+    if rule.dstIps.ipn.num_addresses == 1:
+        print(RED + "\t Destination: " + str(ip.dst) + ENDC)
+    else:
+        print("\t Destination: " + str(ip.dst))
 
 
 # TCP
@@ -160,7 +184,23 @@ def displayUDP(udp):
     print("\t Checksum: " + str(udp.chksum))
 
 
-# TODO : matched UDP ?
+def displayMatchedUDP(udp, rule):
+    """Display the UDP header with matched fields in red."""
+
+    print("[UDP Header]")
+    if hasattr(rule.srcPorts, "listPorts") and len(rule.srcPorts.listPorts) == 1:
+        print(RED + "\t Source Port: " + str(udp.sport) + ENDC)
+    else:
+        print("\t Source Port: " + str(udp.sport))
+    if hasattr(rule.dstPorts, "listPorts") and len(rule.dstPorts.listPorts) == 1:
+        print(RED + "\t Destination Port: " + str(udp.dport) + ENDC)
+    else:
+        print("\t Destination Port: " + str(udp.dport))
+    if hasattr(rule, "len"):
+        print(RED + "\t Length: " + str(udp.len) + ENDC)
+    else:
+        print("\t Length: " + str(udp.len))
+    print("\t Checksum: " + str(udp.chksum))
 
 
 # Payload
@@ -193,7 +233,28 @@ def displayMatchedTCPPayload(tcp, rule):
         displayPayload(tcp)
 
 
-# Whole packet
+# Whole packet - Old
+# def printMatchedPacket(pkt, rule):
+#     """Display the whole packet from IP to Application layer."""
+
+#     if IP in pkt:
+#         # IP Header
+#         displayMatchedIP(pkt[IP], rule)
+#     elif IPv6 in pkt:
+#         displayIPv6(pkt[IPv6])
+#     if TCP in pkt:
+#         # TCP Header
+#         displayMatchedTCP(pkt[TCP], rule)
+#         # Payload
+#         displayMatchedTCPPayload(pkt[TCP], rule)
+
+#     elif UDP in pkt:
+#         displayUDP(pkt[UDP])
+#         print("[UDP Payload]")
+#         displayPayload(pkt[UDP])
+
+
+# Whole packet - New
 def printMatchedPacket(pkt, rule):
     """Display the whole packet from IP to Application layer."""
 
@@ -201,15 +262,14 @@ def printMatchedPacket(pkt, rule):
         # IP Header
         displayMatchedIP(pkt[IP], rule)
     elif IPv6 in pkt:
-        displayIPv6(pkt[IPv6])
+        displayMatchedIPv6(pkt[IPv6], rule)
     if TCP in pkt:
         # TCP Header
         displayMatchedTCP(pkt[TCP], rule)
         # Payload
         displayMatchedTCPPayload(pkt[TCP], rule)
-
     elif UDP in pkt:
-        displayUDP(pkt[UDP])
+        displayMatchedUDP(pkt[UDP], rule)
         print("[UDP Payload]")
         displayPayload(pkt[UDP])
 

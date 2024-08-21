@@ -28,13 +28,18 @@ def main():
 
         if choice == "1":
             print("Initiating Hybrid System...")
-            sids_main.main()
+            # sids_main.main(handle_unknown_packets=True,funnel_packets=True)
+            sids_main.main(
+                handle_unknown_packets=True, funnel_packets=True, mode="Hybrid"
+            )
         elif choice == "2":
             print("Initiating standalone Signature IDS...")
-            sids_main.main()
+            sids_main.main(
+                handle_unknown_packets=False, funnel_packets=False, mode="Signature"
+            )
         elif choice == "3":
             print("Initiating standalone Anomaly IDS...")
-            aids_main.main()
+            aids_main.main(funnel_packets=False, packets=None)
         elif choice == "4":
             print("Exiting...")
             break

@@ -4,7 +4,7 @@ from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.inet6 import IPv6
 
-from sids.Utils import *
+from src.sids.Utils import *
 
 RED = "\033[91m"
 ENDC = "\033[0m"
@@ -72,6 +72,44 @@ def matchedIpString(ip, rule):
 
     if ip.ihl > 5:
         out += "\t Options : " + str(ip.options) + "\n"
+    return out
+
+
+def ipv6String(ip):
+    """Construct the human-readable string corresponding to the IPv6 header."""
+
+    out = "[IP HEADER]" + "\n"
+    out += "\t Version: " + str(ip.version) + "\n"
+    out += "\t Header Length: " + str(40) + " bytes" + "\n"
+    out += "\t Traffic Class: " + str(ip.tc) + "\n"
+    out += "\t Flow Label: " + str(ip.fl) + "\n"
+    out += "\t Source: " + str(ip.src) + "\n"
+    out += "\t Destination: " + str(ip.dst) + "\n"
+    return out
+
+
+def matchedIPv6String(ip, rule):
+    """Construct the human-readable string corresponding to the matched IPv6 header, with matched fields in red."""
+
+    out = "[IP HEADER]" + "\n"
+    out += "\t Version: " + str(ip.version) + "\n"
+    out += "\t Header Length: " + str(40) + " bytes" + "\n"
+    if hasattr(rule, "tc"):
+        out += RED + "\t Traffic Class: " + str(ip.tc) + ENDC + "\n"
+    else:
+        out += "\t Traffic Class: " + str(ip.tc) + "\n"
+    if hasattr(rule, "fl"):
+        out += RED + "\t Flow Label: " + str(ip.fl) + ENDC + "\n"
+    else:
+        out += "\t Flow Label: " + str(ip.fl) + "\n"
+    if rule.srcIps.ipn.num_addresses == 1:
+        out += RED + "\t Source: " + str(ip.src) + ENDC + "\n"
+    else:
+        out += "\t Source: " + str(ip.src) + "\n"
+    if rule.dstIps.ipn.num_addresses == 1:
+        out += RED + "\t Destination: " + str(ip.dst) + ENDC + "\n"
+    else:
+        out += "\t Destination: " + str(ip.dst) + "\n"
     return out
 
 
@@ -219,8 +257,7 @@ def packetString(pkt):
     if IP in pkt:
         out += ipString(pkt[IP])
     elif IPv6 in pkt:
-        # TODO
-        pass
+        out += ipv6String(pkt[IPv6])
     if TCP in pkt:
         out += tcpString(pkt[TCP])
         out += "[TCP Payload]" + "\n"
@@ -240,14 +277,12 @@ def matchedPacketString(pkt, rule):
         # IP Header
         out += matchedIpString(pkt[IP], rule)
     elif IPv6 in pkt:
-        # TODO
-        pass
+        out += matchedIPv6String(pkt[IPv6], rule)
     if TCP in pkt:
         # TCP Header
         out += matchedTcpString(pkt[TCP], rule)
         # Payload
         out += matchedTcpPayloadString(pkt[TCP], rule)
-
     elif UDP in pkt:
         out += matchedUdpString(pkt[UDP], rule)
         out += matchedUdpPayloadString(pkt[UDP], rule)
