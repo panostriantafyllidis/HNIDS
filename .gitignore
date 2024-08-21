@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 
-dataset/
+datasets/
 jupyter_anomaly/model
 
 # C extensions
