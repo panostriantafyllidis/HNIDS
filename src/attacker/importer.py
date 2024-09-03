@@ -5,7 +5,7 @@ from re import VERBOSE
 from re import compile as reg_comp
 from sys import argv
 
-from signature import Signature
+from src.attacker.signature import Signature
 
 REGEX = reg_comp(
     r""" ^

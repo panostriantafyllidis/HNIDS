@@ -4,11 +4,20 @@ from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.inet6 import IPv6
 
-from src.sids.Utils import *
+from src.sids.http_detection_utils import *
 
 RED = "\033[91m"
 ENDC = "\033[0m"
+
+# TCP flags
+FIN = 0x01
+SYN = 0x02
+RST = 0x04
+PSH = 0x08
+ACK = 0x10
 URG = 0x20
+ECE = 0x40
+CWR = 0x80
 
 
 def ipString(ip):

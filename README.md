@@ -19,11 +19,10 @@ This project aims to develop a Hybrid Intrusion Detection System (HIDS) that com
 
 ## Features
 
-- **Signature-based IDS (SIDS)**: Utilizes the C5.0 decision tree algorithm for fast and efficient detection of known threats.
-- **Anomaly-based IDS (AIDS)**: Employs a single-class Support Vector Machine (SVM) to identify unknown attacks through anomaly detection.
+- **Signature-based IDS (SIDS)**: Defines a Rule object , reads and parses rules, reads and dissects captured traffic to find a match. Forwards unmatched packets to the AIDS.
+- **Anomaly-based IDS (AIDS)**: Trains and utilised 12 Machine Learning models to classify captured packets. Creates new rules based on newly classified attacks, using the Rule Object definition.
 - **Hybrid Approach**: Integrates SIDS and AIDS for comprehensive threat detection and mitigation.
-- **Resource Optimization**: Focuses on optimizing computational and memory requirements for efficient operation in resource-constrained environments.
-- **High Accuracy**: Aims to minimize false positives and false negatives while maintaining high detection accuracy.
+- **High Accuracy**: 95+% Accuracy during train-validate conditions. 85+% Accuracy on testing environment conditions.
 
 ## Versioning notes
 
@@ -88,15 +87,15 @@ c:\Users\takis\OneDrive - The University of Manchester\MSc-Hybrid-IDS\src\sids\r
 
 ## Independent Module Usage
 
-SIDS and AIDS are executed independantly in different ways.
+SIDS and AIDS are executed independently in different ways.
 
 The main method is to use the Hybrid UI (main.py)
 
-If for some reason you would like to test/work them as a standalone package then:
+If for some reason you would like to test/work them as a standalone package then use:
 
-NOTE : As of v2.2.7, the shared UI (main.py) will be made in such way that the user's choice (choice 1 or 2) will affect the nature of code paths taken by SIDS (maybe AIDS too?) so the following command will not work (unless you comment-out/modify slightly the SIDS to undo this feature)
-
-If you want to work with AIDS without it making new signatures and trying to add them in the main ruleset - so just packet feeding and prediction analysis output -, then comment out the code relevant to this feature.
+```
+python -m src.<path-to-file-name>
+```
 
 ### AIDS
 
@@ -105,7 +104,7 @@ python -m src.aids.train_aids
 ```
 
 ```bash
-python -m src.aids.test_aids
+python -m src.aids.aids_main
 ```
 
 ### SIDS

@@ -1,0 +1,9 @@
+10k iterations, test_df
+
+Percentage of agreement: 81.63%
+Percentage of matching final verdicts: 72.65%
+
+Model Accuracy Ratios:
+SVC: 71.75%
+One-Class SVM: 71.69%
+Ensemble: 82.64%

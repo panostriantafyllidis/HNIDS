@@ -1,10 +1,6 @@
 """Functions for reading a file of rules."""
 
-from src.sids.Action import *
-from src.sids.IPNetwork import *
-from src.sids.Ports import *
-from src.sids.Protocol import *
-from src.sids.Rule import *
+from src.sids.rule import *
 
 
 def read(filename):

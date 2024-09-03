@@ -1,10 +1,8 @@
-# TODO
-# Code for giving the testing df, packet data from the dataset, rundom row
-# row of Label = 1 if packet payload contains "Attack"
-# row of Label = 0 if packet payload contains "Normal"
-
 import os
 import pickle
+import signal
+import time
+from concurrent.futures import ThreadPoolExecutor
 
 import joblib
 import numpy as np
@@ -14,8 +12,14 @@ from scapy.layers.http import HTTPRequest, HTTPResponse
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from sklearn.svm import SVC, OneClassSVM
 
+from src.packet_sniffer.rule_creator import handle_attack_detection
+from src.sids.sids_main import max_sids_workers
+
 # ============== Global variables to store the dataset and models ==============
-df = None
+
+df = pd.read_csv("datasets/UNSW-NB15/test_df.csv")
+# logging.info("[*] Dataset loaded successfully.")
+
 # Load the models globally to ensure they are loaded only once
 svc_model = joblib.load("src/aids/models/svc_svm_model.joblib")
 ocsvm_model = joblib.load("src/aids/models/one_class_svm_model.joblib")
@@ -38,31 +42,32 @@ selected_features = [
     "smeansz",
     "dmeansz",
     "Sjit",
+    "Djit",
     "Dintpkt",
     "ct_state_ttl",
     "ct_srv_dst",
     "ct_src_ltm",
     "byte_ratio",
-    "pkt_ratio",
     "load_ratio",
     "jit_ratio",
     "tcp_setup_ratio",
 ]
 
+
 # ========================End of Global Variables==========================
 
 
-# Ensuring the Dataset is loaded ONCE , at the start of the system's execution
-# to avoid redundant loading delay per packet
-def load_dataset():
-    """
-    Load the dataset if it's not already loaded.
-    """
-    global df
-    if df is None:
-        logging.info("[*] Loading dataset for the first time...")
-        df = pd.read_csv("datasets/UNSW-NB15/sample_dataset.csv")
-        logging.info("[*] Dataset loaded successfully.")
+# # Ensuring the Dataset is loaded ONCE , at the start of the system's execution
+# # to avoid redundant loading delay per packet
+# def load_dataset():
+#     """
+#     Load the dataset if it's not already loaded.
+#     """
+#     global df
+#     if df is None:
+#         logging.info("[*] Loading dataset for the first time...")
+#         df = pd.read_csv("datasets/UNSW-NB15/sample_dataset.csv")
+#         logging.info("[*] Dataset loaded successfully.")
 
 
 def predict_with_voting(input_data):
@@ -77,9 +82,13 @@ def predict_with_voting(input_data):
     ocsvm_prediction = ocsvm_model.predict(input_data)[0]
     ensemble_prediction = ensemble_model.predict(input_data)[0]
 
+    # Adjust OCSVM prediction: Map 1 -> 0 (Normal), -1 -> 1 (Attack)
+    ocsvm_adjusted = 0 if ocsvm_prediction == 1 else 1
+
     # Majority voting
-    predictions = [svc_prediction, ocsvm_prediction, ensemble_prediction]
+    predictions = [svc_prediction, ocsvm_adjusted, ensemble_prediction]
     final_prediction = 1 if predictions.count(1) > predictions.count(0) else 0
+    # Percentage of agreement: 74.92% using test_df with over 100k entries
 
     return final_prediction, predictions
 
@@ -125,7 +134,9 @@ def prepare_input(user_input):
     return input_data
 
 
-# ============== Choice 1 ==============
+# ==============================================================================
+# Choice 1: User Input Testing
+# ==============================================================================
 def handle_user_input(user_input):
     """
     Handles the user input and performs the model prediction.
@@ -157,17 +168,17 @@ def get_user_input():
         "sbytes": "Source to destination transaction bytes (integer)",
         "sttl": "Source to destination time to live value (integer)",
         "dttl": "Destination to source time to live value (integer)",
-        "Dload": "Destination load (float)",
+        "Dload": "Destination bits per second (float)",
         "Dpkts": "Destination to source packet count (integer)",
         "smeansz": "Mean of the flow packet size transmitted by the source (integer)",
         "dmeansz": "Mean of the flow packet size transmitted by the destination (integer)",
         "Sjit": "Source jitter (mSec) (float)",
+        "Djit": "Destination jitter (mSec) (float)",
         "Dintpkt": "Destination interpacket arrival time (mSec) (float)",
         "ct_state_ttl": "Number of connections with the same state according to specific TTL range (integer)",
         "ct_srv_dst": "Number of connections that contain the same service and destination address in 100 connections (integer)",
         "ct_src_ltm": "Number of connections of the same source address in 100 connections (integer)",
         "byte_ratio": "Ratio of source to destination bytes (calculated feature)",
-        "pkt_ratio": "Ratio of source to destination packets (calculated feature)",
         "load_ratio": "Ratio of source to destination load (calculated feature)",
         "jit_ratio": "Ratio of source to destination jitter (calculated feature)",
         "tcp_setup_ratio": "Ratio of TCP setup times (calculated feature)",
@@ -190,18 +201,34 @@ def get_user_input():
     return user_input
 
 
-# ============== Choice 2 ==============
-def random_testing():
+# ==============================================================================
+# Choice 2: Random Testing
+# ==============================================================================
+def random_testing(used_indices=None):
     """
     Randomly selects a row from the dataset and performs the model prediction.
+    Ensures that the same row is not selected more than once.
     """
+    if used_indices is None:
+        used_indices = set()
+
     # Randomly pick Label 1 or 0
     label = np.random.choice([0, 1])
     df_filtered = df[df["Label"] == label][selected_features]
-    selected_row = df_filtered.sample(n=1)  # Random row with the selected label
+
+    # Find unused indices
+    available_indices = df_filtered.index.difference(used_indices)
+
+    if available_indices.empty:
+        logging.info("No more unique rows available for the selected label.")
+        return None, None  # or handle as needed
+
+    # Random row with the selected label
+    selected_row_index = np.random.choice(available_indices)
+    selected_row = df_filtered.loc[selected_row_index]
 
     # Prepare the input data for the model
-    randinput = prepare_input(selected_row.iloc[0].to_dict())
+    randinput = prepare_input(selected_row.to_dict())
 
     final_prediction, predictions = predict_with_voting(randinput)
 
@@ -213,8 +240,12 @@ def random_testing():
         f"Random row with Label = {label}, individual predictions: {prediction_results}, final decision: {'Attack' if final_prediction == 1 else 'Normal'}"
     )
 
+    return final_prediction, predictions, selected_row_index
 
-# ============== Choice 3 =================
+
+# ==============================================================================
+# Choice 3: Extracting Features from Raw Packet Data
+# ==============================================================================
 def extract_features(packet):
     """
     Extracts the necessary features from the raw packet data.
@@ -277,12 +308,14 @@ def process_packets(packets):
     """
     Processes the packets received by the SIDS.
     """
-    # Ensure the dataset is loaded (only happens once)
-    load_dataset()
+    # Set to keep track of used indices for each label
+    used_attack_indices = set()
+    used_normal_indices = set()
 
     # Convert raw packets to DataFrame
     packet_features = []
     for packet in packets:
+        start_time = time.time()
 
         logging.info(
             f"[*] Processing packet from {packet[IP].src} to {packet[IP].dst}."
@@ -300,12 +333,30 @@ def process_packets(packets):
             label = 1 if name == "Attack" else 0
             logging.info(f"[*] Packet labeled as: {name} ({label}).")
 
-            # Filter the DataFrame and drop the 'Label' column
+            # Filter the DataFrame based on the label
             df_filtered = df[df["Label"] == label][selected_features]
             df_filtered = df_filtered.drop(columns=["Label"], errors="ignore")
-            selected_row = df_filtered.sample(
-                n=1
-            )  # Random row with the corresponding label
+
+            # Choose the set of used indices based on label
+            used_indices = used_attack_indices if label == 1 else used_normal_indices
+
+            # Find available indices
+            available_indices = df_filtered.index.difference(used_indices)
+
+            if available_indices.empty:
+                logging.info(
+                    f"No more unique rows available for label {label}. Resetting used indices."
+                )
+                used_indices.clear()  # Reset used indices to start over
+                available_indices = df_filtered.index
+
+            # Select a random row from available indices
+            selected_row_index = np.random.choice(available_indices)
+            selected_row = df_filtered.loc[[selected_row_index]]
+
+            # Add the selected index to the set of used indices
+            used_indices.add(selected_row_index)
+
             logging.info(f"[*] Selected random row from dataset for label {label}.")
 
             # Validate that all selected features are present in the selected row
@@ -336,9 +387,153 @@ def process_packets(packets):
 
             if final_prediction == 1:
                 logging.info(f"ALERT: Attack detected for packet from {packet[IP].src}")
+                handle_attack_detection(packet)
             else:
                 logging.info(f"False alarm for packet from {packet[IP].src}")
         else:
             logging.info(
                 f"[*] Unknown Packet's name is not 'Attack' or 'Normal'. Skipping packet."
             )
+        end_time = time.time()  # Record the end time
+        elapsed_time = end_time - start_time  # Calculate elapsed time
+        logging.info(f"[*] Time taken to process packet: {elapsed_time:.4f} seconds")
+
+
+# ==============================================================================
+# Choice 4: Testing Live Packet Capture with AIDS
+# ==============================================================================
+
+packet_queue = Queue()
+stop_event = threading.Event()
+
+
+def live_traffic():
+    """
+    Process live traffic by capturing packets directly using Scapy's sniff.
+    Packets are queued and processed by a separate thread.
+    """
+
+    def packet_capture():
+        """
+        Function to capture packets and put them into the queue.
+        This function will periodically check if it should stop based on the stop_event.
+        """
+        logging.info("[*] Starting packet capture...")
+
+        def enqueue_packet(pkt):
+            if IP in pkt and UDP in pkt and pkt[IP].src == "192.168.2.12":
+                packet_queue.put(pkt)
+                logging.info(f"[*] Packet from {pkt[IP].src} captured and queued.")
+
+        # Loop to continuously capture packets, checking the stop_event regularly
+        while not stop_event.is_set():
+            sniff(prn=enqueue_packet, filter="ip", store=0, timeout=1)
+
+    def process_single_packet(packet, used_attack_indices2, used_normal_indices2):
+        """
+        Function to process a single packet.
+        """
+        logging.info(
+            f"[*] Processing live traffic packet from {packet[IP].src} to {packet[IP].dst}."
+        )
+
+        # Extract the packet name using the extraction logic from Choice 3
+        name = extract_name_from_packet(packet)
+        logging.info(f"[*] Packet name extracted: {name}")
+
+        if name == "Attack":
+            label = 1
+        elif name == "Normal":
+            label = 0
+        else:
+            logging.info("[*] Unknown packet name; skipping packet.")
+            return
+
+        df_filtered = df[df["Label"] == label][selected_features]
+        df_filtered = df_filtered.drop(columns=["Label"], errors="ignore")
+
+        # Choose the set of used indices based on label
+        used_indices = used_attack_indices2 if label == 1 else used_normal_indices2
+
+        # Find available indices
+        available_indices = df_filtered.index.difference(used_indices)
+
+        if available_indices.empty:
+            logging.info("No more unique rows available for the selected label.")
+            return
+
+        # Random row with the selected label
+        selected_row_index = np.random.choice(available_indices)
+        selected_row = df_filtered.loc[selected_row_index]
+
+        randinput = prepare_input(selected_row.to_dict())
+
+        final_prediction, predictions = predict_with_voting(randinput)
+
+        model_names = ["SVC", "One-Class SVM", "Ensemble"]
+        prediction_results = {
+            name: pred for name, pred in zip(model_names, predictions)
+        }
+
+        logging.info(
+            f"Live traffic predictions: {prediction_results}, final decision: {'Attack' if final_prediction == 1 else 'Normal'}"
+        )
+
+    def process_queue_packets():
+        """
+        Function to process packets from the queue using a thread pool.
+        """
+        used_attack_indices2 = set()
+        used_normal_indices2 = set()
+        max_aids_workers = 3  # Limit to 4 threads
+        with ThreadPoolExecutor(max_workers=max_aids_workers) as executor:
+            while not stop_event.is_set():
+                try:
+                    packet = packet_queue.get(
+                        timeout=0.6
+                    )  # Use timeout to check stop_event
+                    if packet is None:
+                        break
+
+                    # Submit packet processing to the executor
+                    executor.submit(
+                        process_single_packet,
+                        packet,
+                        used_attack_indices2,
+                        used_normal_indices2,
+                    )
+                    packet_queue.task_done()
+                except queue.Empty:
+                    continue  # Timeout occurred, loop to check stop_event
+
+    def signal_handler(sig, frame):
+        """
+        Handle keyboard interrupt and stop packet capture and processing gracefully.
+        """
+        logging.info("[*] Live traffic IDS stopping...")
+        stop_event.set()  # Signal to stop threads
+        packet_queue.put(None)  # Stop the packet processing thread
+        sys.exit(0)
+
+    # Set up signal handling for graceful shutdown
+    signal.signal(signal.SIGINT, signal_handler)
+
+    # Start the packet capture in a separate thread
+    capture_thread = threading.Thread(target=packet_capture)
+    capture_thread.daemon = True
+    capture_thread.start()
+
+    # Start the packet processing in the main thread
+    process_thread = threading.Thread(target=process_queue_packets)
+    process_thread.daemon = True
+    process_thread.start()
+
+    try:
+        # Keep the main thread running to handle signals
+        while True:
+            capture_thread.join(1)
+            process_thread.join(1)
+            if not capture_thread.is_alive() or not process_thread.is_alive():
+                break
+    except KeyboardInterrupt:
+        signal_handler(None, None)

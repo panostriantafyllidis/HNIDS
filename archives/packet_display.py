@@ -4,8 +4,8 @@ from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.inet6 import IPv6
 
-from src.sids.Rule import *
-from src.sids.Utils import *
+from src.sids.rule import *
+from src.sids.http_detection_utils import *
 
 RED = "\033[91m"
 ENDC = "\033[0m"
@@ -231,27 +231,6 @@ def displayMatchedTCPPayload(tcp, rule):
         print(out)
     else:
         displayPayload(tcp)
-
-
-# Whole packet - Old
-# def printMatchedPacket(pkt, rule):
-#     """Display the whole packet from IP to Application layer."""
-
-#     if IP in pkt:
-#         # IP Header
-#         displayMatchedIP(pkt[IP], rule)
-#     elif IPv6 in pkt:
-#         displayIPv6(pkt[IPv6])
-#     if TCP in pkt:
-#         # TCP Header
-#         displayMatchedTCP(pkt[TCP], rule)
-#         # Payload
-#         displayMatchedTCPPayload(pkt[TCP], rule)
-
-#     elif UDP in pkt:
-#         displayUDP(pkt[UDP])
-#         print("[UDP Payload]")
-#         displayPayload(pkt[UDP])
 
 
 # Whole packet - New

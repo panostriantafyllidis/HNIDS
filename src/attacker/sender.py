@@ -11,7 +11,8 @@ import netifaces
 import scapy.all as scapy
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 from scapy.layers.l2 import get_if_hwaddr, getmacbyip
-from snortparser import Parser, SerializeRule
+
+from src.attacker.snortparser import Parser, SerializeRule
 
 AF_INET = netifaces.AF_INET
 ifaddresses = netifaces.ifaddresses

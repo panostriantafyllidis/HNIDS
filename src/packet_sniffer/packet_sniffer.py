@@ -5,8 +5,7 @@ from threading import Thread
 from scapy.all import *
 from scapy.layers.inet import IP, TCP, UDP
 
-# import src.sids.RuleFileReader
-from src.sids.Rule import *
+from src.sids.rule import *
 
 
 class Sniffer(Thread):
@@ -28,31 +27,46 @@ class Sniffer(Thread):
         return self.stopped
 
     def handleUnknownPacket(self, pkt):
-        """Handling unknown packets - from specific IP - If the goal is to handle any and all unknwons, edit bellow"""
-        # if IP in pkt and pkt[IP].src == "192.168.2.10":
+        """Handling unknown packets"""
         with self.lock:
             # Acquiring the lock to ensure thread-safe access to unknownPackets
             self.unknownPackets.append(pkt)  # Store the raw packet data
 
+    def update_ruleset(self):
+
+        from src.sids.rule_file_reader import read
+        from src.sids.sids_main import DEFAULT_RULESET_PATH
+
+        logging.info("[*] Reloading rules due to new rule addition...")
+        self.ruleList, errorCount = read(DEFAULT_RULESET_PATH)
+        if errorCount == 0:
+            logging.info(
+                f"[*] All ({len(self.ruleList)}) rules have been correctly read."
+            )
+        else:
+            logging.info(f"[*] {len(self.ruleList)} rules have been correctly read.")
+            logging.info(f"[*] {errorCount} rules have errors and could not be read.")
+
     def inPacket(self, pkt):
         """Directive for each received packet."""
 
-        # # Check if this packet is a retransmission (for TCP packets)
-        # if TCP in pkt:
-        #     seq_number = pkt[TCP].seq
-        #     ack_number = pkt[TCP].ack
-        #     # Create a unique key for this TCP connection
-        #     tcp_key = (
-        #         pkt[IP].src,
-        #         pkt[IP].dst,
-        #         pkt[TCP].sport,
-        #         pkt[TCP].dport,
-        #         seq_number,
-        #         ack_number,
-        #     )
-        #     if tcp_key in self.processed_sequences:
-        #         return  # Ignore this packet as it's a retransmission
-        #     self.processed_sequences.add(tcp_key)  # Mark this packet as processed
+        # Uncomment for TCP implementation
+        # Check if this packet is a retransmission (for TCP packets)
+        if TCP in pkt:
+            seq_number = pkt[TCP].seq
+            ack_number = pkt[TCP].ack
+            # Create a unique key for this TCP connection
+            tcp_key = (
+                pkt[IP].src,
+                pkt[IP].dst,
+                pkt[TCP].sport,
+                pkt[TCP].dport,
+                seq_number,
+                ack_number,
+            )
+            if tcp_key in self.processed_sequences:
+                return  # Ignore this packet as it's a retransmission
+            self.processed_sequences.add(tcp_key)  # Mark this packet as processed
 
         # Check for IP packets
         if IP in pkt:
@@ -61,11 +75,11 @@ class Sniffer(Thread):
                 # Check for matching rules
                 for rule in self.ruleList:
                     if rule.match(pkt):
-                        matched = True  # packet matched a rule - Known traffic
+                        # matched = True  # packet matched a rule - Known traffic
                         logging.info(rule.getMatchedPrintMessage(pkt))
                         return
 
-                if pkt[IP].src == "192.168.2.33" and pkt[UDP].dport == 5000:
+                if pkt[IP].src == "192.168.2.12":
                     if self.handle_unknown_packets:
                         logging.info(
                             f"[*] Processing unknown packet from IP: {pkt[IP].src} ..."
@@ -83,5 +97,3 @@ class Sniffer(Thread):
         sniff(
             prn=self.inPacket, filter="ip", store=0, stop_filter=self.stopfilter
         )  # ensuring only packets with an IP are captured
-        # logMessage = rule.getMatchedMessage(pkt)
-        # logging.warning(logMessage)

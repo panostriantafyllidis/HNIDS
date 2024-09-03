@@ -3,16 +3,16 @@ from ipaddress import *
 from scapy.all import *
 from scapy.layers.inet import ICMP, IP, TCP, UDP, Ether
 
-from src.sids.Action import *
-from src.sids.IPNetwork import *
-from src.sids.PacketStrings import ENDC, RED, matchedPacketString, packetString
-from src.sids.Ports import *
-from src.sids.Protocol import *
-from src.sids.Utils import *
+from src.sids.action_enum import *
+from src.sids.ip_network_utils import *
+from src.sids.packet_string_builder import ENDC, RED, matchedPacketString, packetString
+from src.sids.port_utils import *
+from src.sids.protocol_enum import *
+from src.sids.http_detection_utils import *
 
 
 class Rule:
-    """A NIDS rule."""
+    """A Signature-based Network IDS rule."""
 
     def __init__(self, str):
         """Construct a rule from a string."""
