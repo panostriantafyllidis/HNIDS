@@ -91,6 +91,56 @@ class Sniffer(Thread):
                     logging.info(
                         f"[*] Sorry, TCP packets not implemented thanks to Windows Firewall issues..."
                     )
+        ####### Uncomment and replace the above with the bellow if you want TCP processing.
+        ####### It works when tested in a secondary machine, but my system had issues and I couldn't keep.
+        # # Check for IP packets
+        # if IP in pkt:
+        #     logging.info(f"[*] Processing IP packet from {pkt[IP].src} to {pkt[IP].dst}.")
+        #     # Check for UDP packets
+        #     if UDP in pkt:
+        #         logging.info(f"[*] Detected UDP packet from {pkt[IP].src} to {pkt[IP].dst}.")
+        #         # Check for matching rules
+        #         for rule in self.ruleList:
+        #             if rule.match(pkt):
+        #                 logging.info(rule.getMatchedPrintMessage(pkt))
+        #                 return
+        #         # Handle unknown UDP packet if unmatched
+        #         if pkt[IP].src == "192.168.2.12" and self.handle_unknown_packets:
+        #             logging.info(
+        #                 f"[*] Processing unknown UDP packet from IP: {pkt[IP].src} ..."
+        #             )
+        #             self.handleUnknownPacket(pkt)
+        #     # Check for TCP packets
+        #     elif TCP in pkt:
+        #         logging.info(f"[*] Detected TCP packet from {pkt[IP].src} to {pkt[IP].dst}.")
+        #         # Create a unique key for this TCP connection to check for retransmissions
+        #         seq_number = pkt[TCP].seq
+        #         ack_number = pkt[TCP].ack
+        #         tcp_key = (
+        #             pkt[IP].src,
+        #             pkt[IP].dst,
+        #             pkt[TCP].sport,
+        #             pkt[TCP].dport,
+        #             seq_number,
+        #             ack_number,
+        #         )
+        #         # Check if the TCP packet is already processed
+        #         if tcp_key in self.processed_sequences:
+        #             logging.info(f"[*] TCP packet {tcp_key} is a retransmission. Ignoring.")
+        #             return  # Ignore this packet as it's a retransmission
+        #         # Mark this TCP packet as processed
+        #         self.processed_sequences.add(tcp_key)
+        #         # After confirming it's not a retransmission, process like UDP
+        #         for rule in self.ruleList:
+        #             if rule.match(pkt):
+        #                 logging.info(rule.getMatchedPrintMessage(pkt))
+        #                 return
+        #         # Handle unknown TCP packet if unmatched
+        #         if pkt[IP].src == "192.168.2.12" and self.handle_unknown_packets:
+        #             logging.info(
+        #                 f"[*] Processing unknown TCP packet from IP: {pkt[IP].src} ..."
+        #             )
+        #             self.handleUnknownPacket(pkt)
 
     def run(self):
         logging.info("[*] Sniffing started.")
