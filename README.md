@@ -15,14 +15,14 @@
 
 ## Overview
 
-This project aims to develop a Hybrid Intrusion Detection System (HIDS) that combines the strengths of Signature-based IDS (SIDS) and Anomaly-based IDS (AIDS) to provide robust security for cloud computing environments. The system is designed to detect and respond to both known and novel threats with high accuracy and minimal false positives.
+This project aims to develop a Hybrid Intrusion Detection System (HIDS) that combines the strengths of Signature-based IDS (SIDS) and Anomaly-based IDS (AIDS) to provide robust network security.
 
-## Features
+<!-- ## Features
 
 - **Signature-based IDS (SIDS)**: Defines a Rule object , reads and parses rules, reads and dissects captured traffic to find a match. Forwards unmatched packets to the AIDS.
 - **Anomaly-based IDS (AIDS)**: Trains and utilised 12 Machine Learning models to classify captured packets. Creates new rules based on newly classified attacks, using the Rule Object definition.
 - **Hybrid Approach**: Integrates SIDS and AIDS for comprehensive threat detection and mitigation.
-- **High Accuracy**: 95+% Accuracy during train-validate conditions. 85+% Accuracy on testing environment conditions.
+- **High Accuracy**: 95+% Accuracy during train-validate conditions. 85+% Accuracy on testing environment conditions. -->
 
 ## Versioning notes
 
@@ -123,4 +123,4 @@ python -m src.aids.aids_main
 python -m src.sids.sids_main
 ```
 
-- Next step : Send some packets from a different device , using the ruleset in "src/sids/rules" as guidelines for known/unknown packet-creation variation limits
+- Next step : Send some packets from a different device , using the rule-set in "src/sids/rules" as guidelines for known/unknown packet-creation variation limits

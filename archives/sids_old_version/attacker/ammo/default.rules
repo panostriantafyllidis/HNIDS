@@ -1,3 +1,0 @@
-alert tcp 192.168.56.104 any -> 192.168.56.1 22 (msg:"Known Attack Activity"; flow:to_server,established; detection_filter:track by_src, count 5, seconds 60; sid:1000004; rev:1;)
-alert icmp 192.168.56.104 any -> 192.168.56.1 5040 (msg:"Known Normal Activity"; itype:8; icode:0; sid:1000005; rev:1;)
-alert tcp any any -> 192.168.56.1 20:30 (msg:"Access attempt to ports 20-30"; sid:1000002; rev:1;)
