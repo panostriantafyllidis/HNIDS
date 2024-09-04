@@ -1,0 +1,23 @@
+{
+    "total_run_time": "22.0 minutes, 6.84 seconds",
+    "cpu_usage": {
+        "user": "32.0 minutes, 0.14 seconds",
+        "system": "1.0 minutes, 36.73 seconds"
+    },
+    "average_cpu_usage_percent": "56.78%",
+    "peak_cpu_usage_percent": "100.00%",
+    "memory_usage": {
+        "rss": 127.5625,
+        "vms": 6244.34375
+    },
+    "disk_io": {
+        "read_count": 205856,
+        "write_count": 156202,
+        "read_bytes": 1068.8221769332886,
+        "write_bytes": 1462.879324913025
+    },
+    "network_io": {
+        "bytes_sent": 84.3194465637207,
+        "bytes_recv": 33.78692150115967
+    }
+}
