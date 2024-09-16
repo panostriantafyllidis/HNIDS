@@ -1,0 +1,121 @@
+2024-08-30 14:43:26,111 - INFO - ****************************************
+2024-08-30 14:43:26,112 - INFO - 	Hybrid Network IDS Initiated:
+2024-08-30 14:43:26,112 - INFO - ****************************************
+2024-08-30 14:43:27,366 - INFO - [*] Using default ruleset path: rules/rule_set.txt
+2024-08-30 14:43:27,366 - INFO - [*] Reading rule file...
+2024-08-30 14:43:27,367 - INFO - [*] Finished reading rule file.
+2024-08-30 14:43:27,368 - INFO - [*] All (13) rules have been correctly read.
+2024-08-30 14:43:27,369 - INFO - [*] Commencing packet sniffing...
+2024-08-30 14:43:27,370 - INFO - [*] Sniffing started.
+2024-08-30 14:43:35,142 - INFO - [91mALERT "This is an ATTACK"
+[0mRule matched :
+alert udp 192.168.2.12 any -> 192.168.0.0/16 23 (msg:"This is an ATTACK")
+
+By packet :
+[IP HEADER]
+	 Version: 4
+	 IHL: 20 bytes
+	 ToS: 0
+	 Total Length: 34
+	 Identification: 36226
+	 Flags: 
+	 Fragment Offset: 0
+	 TTL: 128
+	 Protocol: 17
+	 Header Checksum: 10200
+[91m	 Source: 192.168.2.12[0m
+	 Destination: 192.168.2.20
+[UDP Header]
+	 Source Port: 51608
+[91m	 Destination Port: 23[0m
+	 Length: 14
+	 Checksum: 38768
+[UDP Payload]
+	Raw
+
+
+2024-08-30 14:43:39,424 - INFO - [91mALERT "Hello there NORMAL"
+[0mRule matched :
+alert udp 192.168.2.12 any -> 192.168.0.0/16 80 (msg:"Hello there NORMAL")
+
+By packet :
+[IP HEADER]
+	 Version: 4
+	 IHL: 20 bytes
+	 ToS: 0
+	 Total Length: 34
+	 Identification: 36227
+	 Flags: 
+	 Fragment Offset: 0
+	 TTL: 128
+	 Protocol: 17
+	 Header Checksum: 10199
+[91m	 Source: 192.168.2.12[0m
+	 Destination: 192.168.2.20
+[UDP Header]
+	 Source Port: 51608
+[91m	 Destination Port: 80[0m
+	 Length: 14
+	 Checksum: 38711
+[UDP Payload]
+	Raw
+
+
+2024-08-30 14:43:45,273 - INFO - [*] Sorry, TCP packets not implemented thanks to Windows Firewall issues...
+2024-08-30 14:43:53,186 - INFO - [91mALERT "Possible Attack"
+[0mRule matched :
+alert udp 192.168.2.12 51608 -> 192.168.2.20 5000 (msg: "Possible Attack")
+
+By packet :
+[IP HEADER]
+	 Version: 4
+	 IHL: 20 bytes
+	 ToS: 0
+	 Total Length: 34
+	 Identification: 36231
+	 Flags: 
+	 Fragment Offset: 0
+	 TTL: 128
+	 Protocol: 17
+	 Header Checksum: 10195
+[91m	 Source: 192.168.2.12[0m
+[91m	 Destination: 192.168.2.20[0m
+[UDP Header]
+[91m	 Source Port: 51608[0m
+[91m	 Destination Port: 5000[0m
+	 Length: 14
+	 Checksum: 33791
+[UDP Payload]
+	Raw
+
+
+2024-08-30 14:43:58,898 - INFO - [*] Processing unknown packet from IP: 192.168.2.12 ...
+2024-08-30 14:43:58,946 - INFO - [*] Unknown packet forwarded to Anomaly subsystem...
+2024-08-30 14:43:58,992 - INFO - [*] Anomaly Subsystem processing unknown packet...
+2024-08-30 14:43:59,023 - INFO - [*] Processing packet from 192.168.2.12 to 192.168.2.20.
+2024-08-30 14:43:59,053 - INFO - [*] Extracted payload: Attack
+2024-08-30 14:43:59,085 - INFO - [*] Identified packet as: Attack
+2024-08-30 14:43:59,115 - INFO - [*] Packet name extracted: Attack
+2024-08-30 14:43:59,146 - INFO - [*] Packet labeled as: Attack (1).
+2024-08-30 14:43:59,332 - INFO - [*] Selected random row from dataset for label 1.
+2024-08-30 14:43:59,364 - INFO - [*] Input data prepared for model prediction.
+2024-08-30 14:44:20,703 - INFO - Packet predictions: {'SVC': 1, 'One-Class SVM': 1, 'Ensemble': 1}, final decision:
+2024-08-30 14:44:20,734 - INFO - ALERT: Attack detected for packet from 192.168.2.12
+2024-08-30 14:44:20,795 - INFO - [*] New rule added to rules/rule_set.txt: alert udp 192.168.2.12 51608 -> 192.168.2.20 5033 (msg: "Possible Attack")
+2024-08-30 14:44:20,825 - INFO - [*] Reloading rules due to new rule addition...
+2024-08-30 14:44:20,934 - INFO - [*] All (14) rules have been correctly read.
+2024-08-30 14:44:20,964 - INFO - [*] Time taken to process packet: 21.9410 seconds
+2024-08-30 14:44:43,547 - INFO - [*] Processing unknown packet from IP: 192.168.2.12 ...
+2024-08-30 14:44:43,591 - INFO - [*] Unknown packet forwarded to Anomaly subsystem...
+2024-08-30 14:44:43,621 - INFO - [*] Anomaly Subsystem processing unknown packet...
+2024-08-30 14:44:43,652 - INFO - [*] Processing packet from 192.168.2.12 to 192.168.2.20.
+2024-08-30 14:44:43,682 - INFO - [*] Extracted payload: Normal
+2024-08-30 14:44:43,713 - INFO - [*] Identified packet as: Normal
+2024-08-30 14:44:43,743 - INFO - [*] Packet name extracted: Normal
+2024-08-30 14:44:43,775 - INFO - [*] Packet labeled as: Normal (0).
+2024-08-30 14:44:43,959 - INFO - [*] Selected random row from dataset for label 0.
+2024-08-30 14:44:43,990 - INFO - [*] Input data prepared for model prediction.
+2024-08-30 14:44:46,731 - INFO - Packet predictions: {'SVC': 0, 'One-Class SVM': 0, 'Ensemble': 0}, final decision:
+2024-08-30 14:44:46,761 - INFO - False alarm for packet from 192.168.2.12
+2024-08-30 14:44:46,792 - INFO - [*] Time taken to process packet: 3.1404 seconds
+2024-08-30 14:44:50,318 - INFO - [*] Signature IDS stopping...

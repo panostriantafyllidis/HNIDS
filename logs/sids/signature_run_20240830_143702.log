@@ -1,0 +1,65 @@
+2024-08-30 14:37:02,238 - INFO - ****************************************
+2024-08-30 14:37:02,238 - INFO - 	Signature IDS Initiated:
+2024-08-30 14:37:02,239 - INFO - ****************************************
+2024-08-30 14:37:06,742 - INFO - [*] Using default ruleset path: rules/rule_set.txt
+2024-08-30 14:37:06,742 - INFO - [*] Reading rule file...
+2024-08-30 14:37:06,790 - INFO - [*] Finished reading rule file.
+2024-08-30 14:37:06,791 - INFO - [*] All (12) rules have been correctly read.
+2024-08-30 14:37:06,791 - INFO - [*] Commencing packet sniffing...
+2024-08-30 14:37:06,792 - INFO - [*] Sniffing started.
+2024-08-30 14:37:10,468 - INFO - [91mALERT "This is an ATTACK"
+[0mRule matched :
+alert udp 192.168.2.12 any -> 192.168.0.0/16 23 (msg:"This is an ATTACK")
+
+By packet :
+[IP HEADER]
+	 Version: 4
+	 IHL: 20 bytes
+	 ToS: 0
+	 Total Length: 34
+	 Identification: 36214
+	 Flags: 
+	 Fragment Offset: 0
+	 TTL: 128
+	 Protocol: 17
+	 Header Checksum: 10212
+[91m	 Source: 192.168.2.12[0m
+	 Destination: 192.168.2.20
+[UDP Header]
+	 Source Port: 51608
+[91m	 Destination Port: 23[0m
+	 Length: 14
+	 Checksum: 38768
+[UDP Payload]
+	Raw
+
+
+2024-08-30 14:37:28,952 - INFO - [91mALERT "Hello there NORMAL"
+[0mRule matched :
+alert udp 192.168.2.12 any -> 192.168.0.0/16 80 (msg:"Hello there NORMAL")
+
+By packet :
+[IP HEADER]
+	 Version: 4
+	 IHL: 20 bytes
+	 ToS: 0
+	 Total Length: 34
+	 Identification: 36215
+	 Flags: 
+	 Fragment Offset: 0
+	 TTL: 128
+	 Protocol: 17
+	 Header Checksum: 10211
+[91m	 Source: 192.168.2.12[0m
+	 Destination: 192.168.2.20
+[UDP Header]
+	 Source Port: 51608
+[91m	 Destination Port: 80[0m
+	 Length: 14
+	 Checksum: 36399
+[UDP Payload]
+	Raw
+
+
+2024-08-30 14:37:44,039 - INFO - [*] Sorry, TCP packets not implemented thanks to Windows Firewall issues...
+2024-08-30 14:37:51,312 - INFO - [*] Signature IDS stopping...

@@ -1,0 +1,61 @@
+2024-08-14 16:28:33,095 - INFO - Starting training process...
+2024-08-14 16:29:07,989 - INFO - Categorical columns: ['proto', 'state', 'service']
+2024-08-14 16:29:08,920 - INFO - Proto Mapping:
+2024-08-14 16:29:08,920 - INFO - {'3pc': 0, 'a/n': 1, 'aes-sp3-d': 2, 'any': 3, 'argus': 4, 'aris': 5, 'arp': 6, 'ax.25': 7, 'bbn-rcc': 8, 'bna': 9, 'br-sat-mon': 10, 'cbt': 11, 'cftp': 12, 'chaos': 13, 'compaq-peer': 14, 'cphb': 15, 'cpnx': 16, 'crtp': 17, 'crudp': 18, 'dcn': 19, 'ddp': 20, 'ddx': 21, 'dgp': 22, 'egp': 23, 'eigrp': 24, 'emcon': 25, 'encap': 26, 'esp': 27, 'etherip': 28, 'fc': 29, 'fire': 30, 'ggp': 31, 'gmtp': 32, 'gre': 33, 'hmp': 34, 'i-nlsp': 35, 'iatp': 36, 'ib': 37, 'icmp': 38, 'idpr': 39, 'idpr-cmtp': 40, 'idrp': 41, 'ifmp': 42, 'igmp': 43, 'igp': 44, 'il': 45, 'ip': 46, 'ipcomp': 47, 'ipcv': 48, 'ipip': 49, 'iplt': 50, 'ipnip': 51, 'ippc': 52, 'ipv6': 53, 'ipv6-frag': 54, 'ipv6-no': 55, 'ipv6-opts': 56, 'ipv6-route': 57, 'ipx-n-ip': 58, 'irtp': 59, 'isis': 60, 'iso-ip': 61, 'iso-tp4': 62, 'kryptolan': 63, 'l2tp': 64, 'larp': 65, 'leaf-1': 66, 'leaf-2': 67, 'merit-inp': 68, 'mfe-nsp': 69, 'mhrp': 70, 'micp': 71, 'mobile': 72, 'mtp': 73, 'mux': 74, 'narp': 75, 'netblt': 76, 'nsfnet-igp': 77, 'nvp': 78, 'ospf': 79, 'pgm': 80, 'pim': 81, 'pipe': 82, 'pnni': 83, 'pri-enc': 84, 'prm': 85, 'ptp': 86, 'pup': 87, 'pvp': 88, 'qnx': 89, 'rdp': 90, 'rsvp': 91, 'rtp': 92, 'rvd': 93, 'sat-expak': 94, 'sat-mon': 95, 'sccopmce': 96, 'scps': 97, 'sctp': 98, 'sdrp': 99, 'secure-vmtp': 100, 'sep': 101, 'skip': 102, 'sm': 103, 'smp': 104, 'snp': 105, 'sprite-rpc': 106, 'sps': 107, 'srp': 108, 'st2': 109, 'stp': 110, 'sun-nd': 111, 'swipe': 112, 'tcf': 113, 'tcp': 114, 'tlsp': 115, 'tp++': 116, 'trunk-1': 117, 'trunk-2': 118, 'ttp': 119, 'udp': 120, 'udt': 121, 'unas': 122, 'uti': 123, 'vines': 124, 'visa': 125, 'vmtp': 126, 'vrrp': 127, 'wb-expak': 128, 'wb-mon': 129, 'wsn': 130, 'xnet': 131, 'xns-idp': 132, 'xtp': 133, 'zero': 134}
+2024-08-14 16:29:08,920 - INFO - State Mapping:
+2024-08-14 16:29:08,920 - INFO - {'ACC': 0, 'CLO': 1, 'CON': 2, 'ECO': 3, 'ECR': 4, 'FIN': 5, 'INT': 6, 'MAS': 7, 'PAR': 8, 'REQ': 9, 'RST': 10, 'TST': 11, 'TXD': 12, 'URH': 13, 'URN': 14, 'no': 15}
+2024-08-14 16:29:08,920 - INFO - Service Mapping:
+2024-08-14 16:29:08,920 - INFO - {'-': 0, 'dhcp': 1, 'dns': 2, 'ftp': 3, 'ftp-data': 4, 'http': 5, 'irc': 6, 'pop3': 7, 'radius': 8, 'smtp': 9, 'snmp': 10, 'ssh': 11, 'ssl': 12}
+2024-08-14 16:29:08,920 - INFO - Categorical columns: []
+2024-08-14 16:29:24,635 - INFO - Remaining features after dropping highly correlated ones:Index(['sport', 'dsport', 'proto', 'state', 'dur', 'sbytes', 'sttl', 'dttl',
+       'service', 'Dload', 'Dpkts', 'swin', 'stcpb', 'dtcpb', 'smeansz',
+       'dmeansz', 'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Ltime',
+       'Dintpkt', 'is_sm_ips_ports', 'ct_flw_http_mthd', 'is_ftp_login',
+       'ct_dst_src_ltm', 'Label', 'duration', 'byte_ratio', 'pkt_ratio',
+       'load_ratio', 'jit_ratio', 'tcp_setup_ratio',
+       'byte_pkt_interaction_dst', 'load_jit_interaction_src',
+       'load_jit_interaction_dst', 'pkt_jit_interaction_dst', 'tcp_seq_diff'],
+      dtype='object')
+2024-08-14 16:29:25,148 - INFO - Before resampling:Label
+0        1995400
+1         113882
+Name: count, dtype: int64
+2024-08-14 16:29:27,552 - INFO - After resampling:Label
+0        88000
+1        88000
+Name: count, dtype: int64
+2024-08-14 16:30:02,472 - INFO - Remaining features after dropping low mi-score ones:Index(['sport', 'dsport', 'state', 'dur', 'sbytes', 'sttl', 'dttl', 'Dload',
+       'Dpkts', 'smeansz', 'dmeansz', 'Sjit', 'Djit', 'Ltime', 'Dintpkt',
+       'ct_dst_src_ltm', 'byte_ratio', 'pkt_ratio', 'load_ratio', 'jit_ratio',
+       'tcp_setup_ratio', 'byte_pkt_interaction_dst',
+       'load_jit_interaction_src', 'load_jit_interaction_dst',
+       'pkt_jit_interaction_dst', 'tcp_seq_diff'],
+      dtype='object')
+2024-08-14 16:30:18,861 - INFO - Final selected features post p-value/VIF: ['sport', 'dsport', 'state', 'dur', 'sbytes', 'sttl', 'dttl', 'Dload', 'Dpkts', 'smeansz', 'dmeansz', 'Sjit', 'Djit', 'Ltime', 'Dintpkt', 'ct_dst_src_ltm', 'byte_ratio', 'load_ratio', 'jit_ratio', 'tcp_setup_ratio', 'byte_pkt_interaction_dst', 'load_jit_interaction_src', 'load_jit_interaction_dst', 'pkt_jit_interaction_dst']
+2024-08-14 16:31:28,767 - INFO - Selected features after RFE: Index(['sport', 'dsport', 'state', 'dur', 'sbytes', 'sttl', 'dttl', 'Dload',
+       'Dpkts', 'smeansz', 'dmeansz', 'Sjit', 'Djit', 'Dintpkt',
+       'ct_dst_src_ltm', 'byte_ratio', 'load_ratio', 'jit_ratio',
+       'tcp_setup_ratio', 'pkt_jit_interaction_dst'],
+      dtype='object')
+2024-08-14 16:31:30,630 - INFO - Accuracy: 98.98%
+2024-08-14 16:31:30,630 - INFO - Recall: 99.70%
+2024-08-14 16:31:30,630 - INFO - Precision: 98.29%
+2024-08-14 16:31:30,630 - INFO - F1-Score: 98.99%
+2024-08-14 16:31:30,630 - INFO - Mean Absolute Error: 1.02%
+2024-08-14 16:31:30,630 - INFO - time to train: 1.67 s
+2024-08-14 16:31:30,630 - INFO - time to predict: 0.00 s
+2024-08-14 16:31:30,630 - INFO - total: 1.67 s
+2024-08-14 16:31:30,677 - INFO - Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.98      0.99     17585
+           1       0.98      1.00      0.99     17615
+
+    accuracy                           0.99     35200
+   macro avg       0.99      0.99      0.99     35200
+weighted avg       0.99      0.99      0.99     35200
+
+2024-08-14 16:31:30,692 - INFO - Confusion Matrix:
+[[17279   306]
+ [   52 17563]]
+2024-08-14 16:31:30,711 - INFO - Training process finished.

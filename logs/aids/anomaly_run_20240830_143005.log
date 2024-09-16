@@ -1,0 +1,27 @@
+2024-08-30 14:30:05,948 - INFO - ****************************************
+2024-08-30 14:30:05,949 - INFO - AIDS Initiated:
+2024-08-30 14:30:05,949 - INFO - ****************************************
+2024-08-30 14:30:05,949 - INFO - Select an option:
+2024-08-30 14:30:05,950 - INFO - 1. Testing - Manual User Input
+2024-08-30 14:30:05,950 - INFO - 2. Testing - Random Testing
+2024-08-30 14:30:05,950 - INFO - 3. Training
+2024-08-30 14:30:05,951 - INFO - 4. Exit
+2024-08-30 14:30:09,074 - INFO - Random row with Label = 0, individual predictions: {'SVC': 0, 'One-Class SVM': 0, 'Ensemble': 0}, final decision: Normal
+2024-08-30 14:30:09,075 - INFO - Select an option:
+2024-08-30 14:30:09,075 - INFO - 1. Testing - Manual User Input
+2024-08-30 14:30:09,076 - INFO - 2. Testing - Random Testing
+2024-08-30 14:30:09,076 - INFO - 3. Training
+2024-08-30 14:30:09,076 - INFO - 4. Exit
+2024-08-30 14:30:09,728 - INFO - Random row with Label = 0, individual predictions: {'SVC': 0, 'One-Class SVM': 0, 'Ensemble': 0}, final decision: Normal
+2024-08-30 14:30:09,729 - INFO - Select an option:
+2024-08-30 14:30:09,729 - INFO - 1. Testing - Manual User Input
+2024-08-30 14:30:09,729 - INFO - 2. Testing - Random Testing
+2024-08-30 14:30:09,730 - INFO - 3. Training
+2024-08-30 14:30:09,730 - INFO - 4. Exit
+2024-08-30 14:32:04,456 - INFO - User input predictions: {'SVC': 1, 'One-Class SVM': 1, 'Ensemble': 1}, final decision: Attack
+2024-08-30 14:32:04,456 - INFO - Select an option:
+2024-08-30 14:32:04,456 - INFO - 1. Testing - Manual User Input
+2024-08-30 14:32:04,457 - INFO - 2. Testing - Random Testing
+2024-08-30 14:32:04,457 - INFO - 3. Training
+2024-08-30 14:32:04,457 - INFO - 4. Exit
+2024-08-30 14:33:26,846 - INFO - Exiting the program.
